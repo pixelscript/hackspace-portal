@@ -1,5 +1,5 @@
 import Oicd from '../node_modules/oidc-client/index';
-import { loggedIn, userProfile } from './main.store';
+import { loggedIn, loggedInOnce, userProfile } from './main.store';
 Oicd.Log.logger = console;
 
 const settings = {
@@ -29,6 +29,9 @@ class Auth {
   }
 
   updateStore() {
+    if(this.isLoggedIn){
+      loggedInOnce.set(true);
+    }
     loggedIn.set(this.isLoggedIn);
     userProfile.set(this.user);
   }
