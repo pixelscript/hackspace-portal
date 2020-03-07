@@ -1,17 +1,17 @@
-import Oicd from '../node_modules/oidc-client';
-import {loggedIn, userProfile} from './main.store';
+import Oicd from '../node_modules/oidc-client/index';
+import { loggedIn, userProfile } from './main.store';
 Oicd.Log.logger = console;
 
 const settings = {
   authority: 'https://auth.teessidehackspace.org.uk/auth/realms/master',
   client_id: 'hackspace-api',
-  redirect_uri: 'http://localhost:3000/auth',
-  post_logout_redirect_uri: 'http://localhost:3000/auth',
+  redirect_uri: 'http://localhost:3000',
+  post_logout_redirect_uri: 'http://localhost:3000',
   response_type: 'id_token token',
   scope: 'openid profile resource_access',
   filterProtocolClaims: true,
   loadUserInfo: true
-}
+};
 
 class Auth {
   constructor() {
@@ -19,19 +19,20 @@ class Auth {
   }
 
   get isLoggedIn() {
-    return this.user !== null && (this.user && !this.user.expired);
+    return this.user !== null && this.user && !this.user.expired;
   }
 
   login() {
+    this.user = null;
+    this.updateStore();
     return this.userManager.signinRedirect();
   }
 
   updateStore() {
-    console.log('SETTING TO', this.isLoggedIn, this.user)
     loggedIn.set(this.isLoggedIn);
     userProfile.set(this.user);
   }
-  
+
   logoutSession() {
     this.user = null;
     this.updateStore();
@@ -41,21 +42,19 @@ class Auth {
   async getUser() {
     try {
       this.user = await this.userManager.getUser();
-      if (!this.user) {
+      if (!this.user || this.user.expired) {
         this.user = await this.userManager.signinRedirectCallback();
       }
       this.updateStore();
-      return this.user
-    } catch (e) {
-      return e;
-    }
+    } catch (e) {}
+    return this.user;
   }
 
   get userManager() {
     if (this._userManager) {
       return this._userManager;
     } else {
-      return this._userManager = new Oicd.UserManager(settings);
+      return (this._userManager = new Oicd.UserManager(settings));
     }
   }
 }

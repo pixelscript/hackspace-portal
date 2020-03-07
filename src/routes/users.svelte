@@ -3,5 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>{CONST.TITLE}: About</title>
+  <title>{CONST.TITLE}: Users</title>
 </svelte:head>
+
+<h1>Users</h1>
