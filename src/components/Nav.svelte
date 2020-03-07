@@ -26,6 +26,14 @@
 		float: left;
 	}
 
+	li:last-child {
+		float: right;
+	}
+
+	button {
+		margin:0.35em 0;
+	}
+
 	[aria-current] {
 		position: relative;
 		display: inline-block;
@@ -46,6 +54,10 @@
 		padding: 1em 0.5em;
 		display: block;
 	}
+
+	button {
+		float:right;
+	}
 </style>
 
 <nav>
@@ -56,5 +68,6 @@
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->
 		<li><a rel=prefetch aria-current='{segment === "blog" ? "page" : undefined}' href='blog'>blog</a></li>
+		<li><button on:click="{()=>{window.open('/logout','_self')}}">logout</button></li>
 	</ul>
 </nav>

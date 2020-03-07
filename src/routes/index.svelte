@@ -1,6 +1,8 @@
 <script>
   import CONST from "../constants.js";
-  import Login from "../components/Login.svelte";
+	import Login from "../components/Login.svelte";
+	import {login} from "../auth.js";
+	login();
   let loggedIn = false;
 </script>
 

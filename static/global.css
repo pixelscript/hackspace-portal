@@ -37,6 +37,14 @@ input, button {
 	margin: 3px;
 }
 
+button {
+	background: #1AB91B;
+	padding:0.5em;
+	color: white;
+	border-radius: 2px;
+	border: none;
+}
+
 @media (min-width: 400px) {
 	body {
 		font-size: 16px;
