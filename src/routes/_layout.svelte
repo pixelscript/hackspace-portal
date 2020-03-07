@@ -26,6 +26,12 @@
     margin: 0 auto;
     box-sizing: border-box;
   }
+
+  @media (min-width: 1600px) {
+    main {
+      max-width: 84em;
+    }
+  }
 </style>
 
 {#if ready}

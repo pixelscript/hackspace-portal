@@ -2,13 +2,13 @@
   import CONST from "../constants";
   import pokemon from "../pokemon";
   import Card from "../components/Card.svelte";
+  import Spinner from "../components/Spinner.svelte";
 
   let pokes = [];
   if (process.browser) {
     (async () => {
       const result = await pokemon();
       pokes = result.data.pokemons;
-      console.log(result);
     })();
   }
 </script>
@@ -32,7 +32,9 @@
 </svelte:head>
 
 <h1>Users</h1>
-
+{#if pokes.length <= 0}
+  <Spinner/>
+{:else}
 <div class="user-list">
   {#each pokes as poke}
     <div>
@@ -40,3 +42,4 @@
     </div>
   {/each}
 </div>
+{/if}
