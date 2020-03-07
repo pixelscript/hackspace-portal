@@ -1,9 +1,10 @@
 <script>
-  import CONST from "../constants.js";
-  import { getUser } from "../auth.js";
+  import CONST from "../constants";
   import HackspaceLogo from "../components/HackspaceLogo.svelte";
   import LoggedOut from "../components/LoggedOut.svelte";
-  const userPromise = getUser();
+  import Auth from "../auth";
+  import { loggedIn } from "../main.store";
+  const userPromise = Auth.getUser();
 </script>
 
 <style>
@@ -17,10 +18,11 @@
 <svelte:head>
   <title>{CONST.TITLE}: User</title>
 </svelte:head>
+
 {#await userPromise}
   <h1>WAITING</h1>
 {:then user}
-  {#if user.profile}
+  {#if user.profile && loggedIn}
     <HackspaceLogo />
     <h1>🎉 Welcome {user.profile.name} 🎉</h1>
     <h2>Username</h2>
@@ -28,8 +30,6 @@
     <h2>Email</h2>
     <p>{user.profile.email}</p>
   {:else}
-    <LoggedOut/>
+    <LoggedOut></LoggedOut>
   {/if}
-{:catch error}
-  <LoggedOut/>
 {/await}

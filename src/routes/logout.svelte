@@ -1,10 +1,7 @@
 <script>
   import CONST from "../constants.js";
-  import {logoutSession} from "../auth.js";
-	(async () => {
-    const ls = await logoutSession();
-    console.log(ls);
-  })();
+  import Auth from "../auth.js";
+	Auth.logoutSession();
 </script>
 
 <svelte:head>

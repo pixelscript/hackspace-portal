@@ -1,5 +1,6 @@
-import oidc from '../node_modules/oidc-client';
-oidc.Log.logger = console;
+import Oicd from '../node_modules/oidc-client';
+import {loggedIn, userProfile} from './main.store';
+Oicd.Log.logger = console;
 
 const settings = {
   authority: 'https://auth.teessidehackspace.org.uk/auth/realms/master',
@@ -12,26 +13,51 @@ const settings = {
   loadUserInfo: true
 }
 
+class Auth {
+  constructor() {
+    this.user = null;
+  }
 
-export async function login() {
-  const UserManager = new oidc.UserManager(settings);
-  return UserManager.signinRedirect();
-}
+  get isLoggedIn() {
+    return this.user !== null && (this.user && !this.user.expired);
+  }
 
-export async function logoutSession() {
-  const UserManager = new oidc.UserManager(settings);
-  return UserManager.signoutRedirect();
-}
+  login() {
+    return this.userManager.signinRedirect();
+  }
 
-export async function getUser() {
-  const UserManager = new oidc.UserManager(settings);
-  try {
-    let user = await UserManager.getUser();
-    if (!user) {
-      user = await UserManager.signinRedirectCallback();
+  updateStore() {
+    console.log('SETTING TO', this.isLoggedIn, this.user)
+    loggedIn.set(this.isLoggedIn);
+    userProfile.set(this.user);
+  }
+  
+  logoutSession() {
+    this.user = null;
+    this.updateStore();
+    return this.userManager.signoutRedirect();
+  }
+
+  async getUser() {
+    try {
+      this.user = await this.userManager.getUser();
+      if (!this.user) {
+        this.user = await this.userManager.signinRedirectCallback();
+      }
+      this.updateStore();
+      return this.user
+    } catch (e) {
+      return e;
     }
-    return user
-  } catch (e) {
-    return e;
+  }
+
+  get userManager() {
+    if (this._userManager) {
+      return this._userManager;
+    } else {
+      return this._userManager = new Oicd.UserManager(settings);
+    }
   }
 }
+
+export default new Auth();

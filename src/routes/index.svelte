@@ -1,40 +1,14 @@
 <script>
-  import CONST from "../constants.js";
-	import Login from "../components/Login.svelte";
-	import {login} from "../auth.js";
-	login();
-  let loggedIn = false;
+	import CONST from "../constants.js";
+	import Auth from '../auth';
+	import {loggedIn} from '../main.store';
+	if($loggedIn){
+    window.open('/about', '_self');
+  } else {
+		Auth.login();
+	}
 </script>
 
-<style>
-  h1 {
-    text-align: center;
-    margin: 0 auto;
-  }
-
-  h1 {
-    font-size: 2.8em;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin: 0 0 0.5em 0;
-  }
-
-  p {
-    margin: 1em auto;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 4em;
-    }
-  }
-</style>
-
 <svelte:head>
-  <title>{CONST.TITLE}: The Happiest Place on Earth &trade;</title>
+  <title>{CONST.TITLE}: Logging you in</title>
 </svelte:head>
-
-
-{#if !loggedIn}
-  <Login/>
-{/if}
