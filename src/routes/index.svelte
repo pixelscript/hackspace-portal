@@ -22,7 +22,7 @@
 
 {#if $userProfile.profile && loggedIn}
   <HackspaceLogo />
-  <h1>🎉 Welcome {$userProfile.profile.name} 🎉</h1>
+  <h1>Welcome {$userProfile.profile.name} 🎉</h1>
   <h2>Username</h2>
   <p>{$userProfile.profile.preferred_username}</p>
   <h2>Email</h2>
